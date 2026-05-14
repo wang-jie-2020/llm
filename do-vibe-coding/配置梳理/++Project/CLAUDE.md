@@ -1,10 +1,14 @@
-> 架构细节见 [ARCHITECTURE.md](./ARCHITECTURE.md)，本文件只包含规则和流程。
+# CLAUDE.md
+
+xxxxxxxxxx
 
 ## 开发规则
 
 **提交前必须详尽测试：**
 - 每次提交代码前，必须在开发环境中充分测试所有改动的功能，确认无回归
 - 涉及前端 UI 的改动需要实际启动应用验证（`npm run dev` 或 `npm run electron:dev`）
+- todo dotnet
+- todo java
 - 涉及构建/打包的改动需要完整执行一次打包流程验证产物可用
 - 涉及多平台的改动需要考虑各平台的差异性
 
