@@ -107,3 +107,6 @@
 3. 实现 Markdown 生成与 Issue 发布。
 4. 做手动触发验证与幂等验证。
 5. 稳定后再接入 B。
+
+## 11. 实施计划
+- 实施计划文件：`docs/superpowers/plans/2026-05-11-github-trending-mvp-a-implementation-plan.md`
