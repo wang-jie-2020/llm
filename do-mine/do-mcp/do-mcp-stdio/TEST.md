@@ -1,0 +1,1 @@
+请调用 demo-mcp 的 fetch_json，参数 {"url":"https://jsonplaceholder.typicode.com/todos/1","timeoutMs":3000,"retries": 1}
