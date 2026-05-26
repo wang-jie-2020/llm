@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brutalist Portfolio | Full-Stack Developer</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+
+    <header class="site-header" data-reveal>
+      <p class="availability">OPEN FOR FULL-STACK ROLES · 2026</p>
+      <nav aria-label="主导航" class="jump-nav">
+        <a href="#projects">PROJECTS</a>
+        <a href="#skills">SKILLS</a>
+        <a href="#contact">CONTACT</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title" data-reveal>
+        <p class="hero-label">BRUTALIST PORTFOLIO / SINGLE PAGE</p>
+        <h1 id="hero-title" class="hero-name">JIE<br />WANG</h1>
+        <p class="hero-role">FULL-STACK DEVELOPER</p>
+        <p class="hero-copy">
+          30 秒内看清我的价值：把混乱需求拆成稳定系统，让前端体验、后端可靠性、上线效率同时成立。
+        </p>
+        <div class="hero-actions">
+          <a class="action-button action-primary" href="#projects">SEE THE WORK</a>
+          <a class="action-button" href="#contact">CONTACT NOW</a>
+        </div>
+        <ul class="hero-meta" role="list" aria-label="工作关键词">
+          <li>Problem-first</li>
+          <li>Ship-fast</li>
+          <li>Measure-always</li>
+        </ul>
+      </section>
+
+      <section id="projects" class="projects" aria-labelledby="projects-title">
+        <div class="section-head" data-reveal>
+          <h2 id="projects-title" class="section-title">3 PROJECTS. ZERO FLUFF.</h2>
+          <p class="section-intro">每个项目都按“问题 / 方案 / 结果”展开，方便你快速判断我是否匹配你的团队。</p>
+        </div>
+
+        <ol class="project-grid" role="list">
+          <li class="project-card" data-reveal>
+            <a class="project-card-link" href="#contact" aria-label="联系我了解实时派单系统案例">
+              <span class="project-index">01</span>
+              <h3 class="project-title">REAL-TIME DISPATCH</h3>
+              <dl class="project-detail">
+                <div class="detail-row">
+                  <dt>PROBLEM</dt>
+                  <dd>高峰时段任务分配滞后，状态更新不同步，业务反馈慢。</dd>
+                </div>
+                <div class="detail-row">
+                  <dt>SOLUTION</dt>
+                  <dd>用事件流 + WebSocket 重构调度链路，拆分慢查询并补齐可观测指标。</dd>
+                </div>
+                <div class="detail-row">
+                  <dt>RESULT</dt>
+                  <dd>峰值期依旧保持秒内反馈，人工回滚显著减少，排障时间更短。</dd>
+                </div>
+              </dl>
+              <span class="project-cta">ASK FOR CASE STUDY</span>
+            </a>
+          </li>
+
+          <li class="project-card" data-reveal>
+            <a class="project-card-link" href="#contact" aria-label="联系我了解结算系统改造案例">
+              <span class="project-index">02</span>
+              <h3 class="project-title">BILLING REBUILD</h3>
+              <dl class="project-detail">
+                <div class="detail-row">
+                  <dt>PROBLEM</dt>
+                  <dd>账单规则分散且难追溯，跨团队协作时容易出现重复修复。</dd>
+                </div>
+                <div class="detail-row">
+                  <dt>SOLUTION</dt>
+                  <dd>统一计费规则层，前后端共享校验协议，建立自动化回归脚本。</dd>
+                </div>
+                <div class="detail-row">
+                  <dt>RESULT</dt>
+                  <dd>发布节奏稳定，计费争议明显下降，需求迭代速度提升。</dd>
+                </div>
+              </dl>
+              <span class="project-cta">SEE ARCHITECTURE NOTES</span>
+            </a>
+          </li>
+
+          <li class="project-card" data-reveal>
+            <a class="project-card-link" href="#contact" aria-label="联系我了解 AI 工单助手案例">
+              <span class="project-index">03</span>
+              <h3 class="project-title">AI SUPPORT COPILOT</h3>
+              <dl class="project-detail">
+                <div class="detail-row">
+                  <dt>PROBLEM</dt>
+                  <dd>客服知识分散在多处文档，新人上手慢，响应质量波动大。</dd>
+                </div>
+                <div class="detail-row">
+                  <dt>SOLUTION</dt>
+                  <dd>构建检索增强工作流，把 FAQ、工单历史与操作手册统一到同一入口。</dd>
+                </div>
+                <div class="detail-row">
+                  <dt>RESULT</dt>
+                  <dd>首轮答复更一致，可复用答案沉淀更快，团队培训成本降低。</dd>
+                </div>
+              </dl>
+              <span class="project-cta">REQUEST DEMO FLOW</span>
+            </a>
+          </li>
+        </ol>
+      </section>
+
+      <section id="skills" class="skills" aria-labelledby="skills-title" data-reveal>
+        <h2 id="skills-title" class="section-title">SKILLS THAT SHIP</h2>
+        <div class="skills-grid">
+          <article class="skill-group">
+            <h3>LANGUAGE</h3>
+            <ul role="list">
+              <li>TypeScript</li>
+              <li>JavaScript</li>
+              <li>C#</li>
+              <li>SQL</li>
+              <li>Python</li>
+            </ul>
+          </article>
+
+          <article class="skill-group">
+            <h3>FRONTEND</h3>
+            <ul role="list">
+              <li>React / Next.js</li>
+              <li>HTML / CSS</li>
+              <li>Design Systems</li>
+              <li>WCAG AA</li>
+              <li>Web Performance</li>
+            </ul>
+          </article>
+
+          <article class="skill-group">
+            <h3>BACKEND & OPS</h3>
+            <ul role="list">
+              <li>Node.js / .NET</li>
+              <li>PostgreSQL / Redis</li>
+              <li>Docker / CI-CD</li>
+              <li>Observability</li>
+              <li>API Design</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="contact" class="contact" aria-labelledby="contact-title" data-reveal>
+        <h2 id="contact-title" class="section-title">LET'S BUILD TOGETHER</h2>
+        <p class="contact-copy">如果你希望一个能从需求梳理到上线交付都能独立推进的全栈开发者，我们可以约一次 20 分钟沟通。</p>
+
+        <div class="contact-board">
+          <p class="contact-label">EMAIL</p>
+          <p class="contact-email" aria-label="联系邮箱">your.name@domain.com</p>
+          <button id="copy-email" class="copy-button" type="button" data-email="your.name@domain.com">COPY EMAIL</button>
+          <p id="copy-status" class="copy-status" role="status" aria-live="polite">按按钮可复制邮箱地址。</p>
+        </div>
+
+        <ul class="contact-list" role="list" aria-label="其他联系方式">
+          <li><span>GitHub</span><strong>@yourhandle</strong></li>
+          <li><span>LinkedIn</span><strong>/in/yourname</strong></li>
+          <li><span>Location</span><strong>Remote / Onsite</strong></li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="site-footer">Replace placeholder contact details before publishing.</footer>
+  </body>
+</html>

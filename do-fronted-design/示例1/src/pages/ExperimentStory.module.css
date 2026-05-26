@@ -1,0 +1,581 @@
+:root {
+  color-scheme: light;
+}
+
+.page {
+  --paper: #f5f2ea;
+  --ink: #151515;
+  --muted: #5e5b53;
+  --line: #c9c2b3;
+  --accent: #bb3f22;
+  --accent-soft: #eed3c7;
+  --card: #f8f6f0;
+  --contrast: #121212;
+  position: relative;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  overflow: hidden;
+  padding: clamp(2.2rem, 5vw, 5rem) clamp(1rem, 4vw, 4.5rem) clamp(3rem, 5vw, 6rem);
+  font-family: 'Source Serif 4', 'Noto Serif SC', serif;
+}
+
+.texture {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 15%, rgba(187, 63, 34, 0.08), transparent 38%),
+    radial-gradient(circle at 76% 72%, rgba(0, 0, 0, 0.055), transparent 40%),
+    linear-gradient(to right, rgba(21, 21, 21, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(21, 21, 21, 0.02) 1px, transparent 1px);
+  background-size: auto, auto, 28px 28px, 28px 28px;
+  pointer-events: none;
+}
+
+.story {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(2.4rem, 5vw, 4.2rem);
+}
+
+.hero,
+.method,
+.chartSection,
+.limitSection,
+.cta {
+  border: 1px solid var(--line);
+  background: linear-gradient(160deg, rgba(248, 246, 240, 0.92), rgba(245, 242, 234, 0.75));
+  box-shadow: 0 18px 40px rgba(15, 15, 15, 0.08);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(220px, 0.7fr);
+  gap: 2rem;
+  padding: clamp(1.5rem, 4vw, 3.2rem);
+}
+
+.kicker {
+  margin: 0;
+  font-family: 'Bebas Neue', 'Noto Sans SC', sans-serif;
+  letter-spacing: 0.15em;
+  font-size: 0.92rem;
+  color: var(--accent);
+}
+
+.title {
+  margin: 0.6rem 0 1rem;
+  font-size: clamp(2rem, 4.7vw, 4.1rem);
+  line-height: 1.08;
+  max-width: 18ch;
+}
+
+.lead {
+  margin: 0;
+  max-width: 56ch;
+  font-size: clamp(1rem, 1.8vw, 1.22rem);
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.stats {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+  gap: 1rem;
+}
+
+.statItem {
+  margin: 0;
+  border-left: 3px solid var(--accent);
+  padding: 0.55rem 0 0.55rem 0.85rem;
+  background: rgba(187, 63, 34, 0.07);
+}
+
+.statItem dt {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.statItem dd {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-family: 'Bebas Neue', 'Noto Sans SC', sans-serif;
+  letter-spacing: 0.03em;
+}
+
+.method {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(1.1rem, 3vw, 3rem);
+  padding: clamp(1.3rem, 3.8vw, 2.6rem);
+}
+
+.sectionTag,
+.sectionTagDark {
+  margin: 0;
+  font-family: 'Bebas Neue', 'Noto Sans SC', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.sectionTag {
+  color: var(--accent);
+}
+
+.sectionTagDark {
+  color: #f0ece4;
+}
+
+.method h2,
+.chartSection h2,
+.limitSection h2,
+.cta h2 {
+  margin: 0.6rem 0 0;
+  line-height: 1.2;
+  font-size: clamp(1.45rem, 2.5vw, 2.15rem);
+}
+
+.methodList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.methodList li {
+  border-bottom: 1px dashed var(--line);
+  padding-bottom: 0.65rem;
+  line-height: 1.72;
+  color: #353331;
+}
+
+.chartSection {
+  padding: clamp(1.2rem, 3.8vw, 2.8rem);
+}
+
+.chartHeader {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: clamp(1.2rem, 2.6vw, 2.2rem);
+}
+
+.chartGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(0.95rem, 2vw, 1.25rem);
+}
+
+.chartCard {
+  border: 1px solid var(--line);
+  background: #faf8f3;
+  padding: clamp(1rem, 2.1vw, 1.45rem);
+  display: grid;
+  align-content: start;
+  gap: 0.68rem;
+}
+
+.chartCard h3 {
+  margin: 0;
+  font-size: clamp(1.05rem, 2vw, 1.36rem);
+}
+
+.chartDesc {
+  margin: 0;
+  line-height: 1.67;
+  color: var(--muted);
+  font-size: 0.97rem;
+}
+
+.chartWide {
+  grid-column: span 8;
+}
+
+.chartTall {
+  grid-column: span 4;
+}
+
+.chartNarrow {
+  grid-column: span 12;
+}
+
+.chartSvg {
+  width: 100%;
+  border-top: 1px solid var(--line);
+  padding-top: 0.75rem;
+}
+
+.gridLine {
+  stroke: rgba(21, 21, 21, 0.13);
+  stroke-width: 1;
+}
+
+.axisStrong {
+  stroke: rgba(21, 21, 21, 0.45);
+  stroke-width: 1.2;
+}
+
+.axisLabel {
+  font-size: 11px;
+  fill: #6a655b;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+}
+
+.lineControl,
+.lineVariant {
+  fill: none;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lineControl {
+  stroke: #4b4640;
+  stroke-dasharray: 5 4;
+}
+
+.lineVariant {
+  stroke: var(--accent);
+}
+
+.dotControl {
+  fill: #4b4640;
+}
+
+.dotVariant {
+  fill: var(--accent);
+}
+
+.legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.legendControl,
+.legendVariant {
+  display: inline-block;
+  width: 22px;
+  height: 3px;
+}
+
+.legendControl {
+  background: #4b4640;
+}
+
+.legendVariant {
+  background: var(--accent);
+}
+
+.retentionWrap {
+  margin-top: 0.3rem;
+  display: grid;
+  gap: 0.95rem;
+}
+
+.retentionRow {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.retentionTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.rowLabel {
+  font-size: 0.93rem;
+}
+
+.rowDelta {
+  font-size: 0.9rem;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  color: var(--accent);
+}
+
+.barTrack {
+  position: relative;
+  height: 30px;
+  border: 1px solid var(--line);
+  background: repeating-linear-gradient(to right, #f3efe5 0, #f3efe5 16px, #ece7da 16px, #ece7da 32px);
+  overflow: hidden;
+}
+
+.barControl,
+.barVariant {
+  position: absolute;
+  left: 0;
+  height: 12px;
+  border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.barControl {
+  top: 3px;
+  background: rgba(58, 54, 49, 0.84);
+}
+
+.barVariant {
+  bottom: 3px;
+  background: var(--accent);
+}
+
+.rowValues {
+  margin: 0;
+  font-size: 0.81rem;
+  color: #666055;
+}
+
+.intervalWrap {
+  margin-top: 0.45rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.intervalRow {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr) 58px;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.intervalTrack {
+  position: relative;
+  height: 26px;
+  border: 1px solid var(--line);
+  background: #f3efe5;
+}
+
+.intervalZero {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  width: 1.5px;
+  background: #141414;
+}
+
+.intervalRange {
+  position: absolute;
+  top: 7px;
+  height: 10px;
+  background: rgba(187, 63, 34, 0.34);
+  border: 1px solid rgba(187, 63, 34, 0.55);
+}
+
+.intervalDot {
+  position: absolute;
+  top: 5px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  box-shadow: 0 0 0 2px #faf8f3;
+}
+
+.limitSection {
+  background: linear-gradient(145deg, #1b1b1b, #131313);
+  color: #f5f1e7;
+  padding: clamp(1.3rem, 3.6vw, 2.55rem);
+  display: grid;
+  grid-template-columns: minmax(220px, 0.95fr) minmax(0, 1.05fr);
+  gap: 1.25rem;
+}
+
+.limitList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.limitList li {
+  border-left: 2px solid rgba(238, 211, 199, 0.46);
+  padding-left: 0.85rem;
+  color: #ded9cd;
+  line-height: 1.72;
+}
+
+.cta {
+  padding: clamp(1.25rem, 4vw, 2.7rem);
+  display: grid;
+  gap: 1.1rem;
+}
+
+.ctaText {
+  margin: 0.55rem 0 0;
+  line-height: 1.72;
+  color: var(--muted);
+}
+
+.actionList {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.48rem;
+  line-height: 1.62;
+}
+
+.ctaActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.4rem;
+}
+
+.primaryButton,
+.ghostButton {
+  border: 1px solid transparent;
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 0.93rem;
+  padding: 0.62rem 1.08rem;
+  cursor: pointer;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, background-color 0.28s ease;
+}
+
+.primaryButton {
+  background: var(--accent);
+  color: #fff9f5;
+}
+
+.primaryButton:hover,
+.primaryButton:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(187, 63, 34, 0.28);
+}
+
+.ghostButton {
+  border-color: var(--line);
+  background: transparent;
+  color: #2a2926;
+}
+
+.ghostButton:hover,
+.ghostButton:focus-visible {
+  background: #ebe5d8;
+}
+
+.primaryButton:focus-visible,
+.ghostButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.reveal,
+.revealSoft,
+.revealSoftLate {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: reveal 0.7s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+}
+
+.revealSoft {
+  animation-delay: 0.12s;
+}
+
+.revealSoftLate {
+  animation-delay: 0.22s;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero,
+  .method,
+  .limitSection {
+    grid-template-columns: 1fr;
+  }
+
+  .chartWide,
+  .chartTall,
+  .chartNarrow {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 1.25rem 0.9rem 3rem;
+  }
+
+  .title {
+    max-width: 100%;
+  }
+
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+
+  .statItem {
+    border-left-width: 2px;
+    padding: 0.45rem 0.45rem 0.45rem 0.62rem;
+  }
+
+  .intervalRow {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+  }
+
+  .ctaActions {
+    flex-direction: column;
+  }
+
+  .primaryButton,
+  .ghostButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 375px) {
+  .hero,
+  .method,
+  .chartSection,
+  .limitSection,
+  .cta {
+    padding: 1rem;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .revealSoft,
+  .revealSoftLate,
+  .primaryButton,
+  .ghostButton {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

@@ -1,0 +1,853 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>实验叙事 · 增长实验 042</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      .page {
+        --paper: #f5f2ea;
+        --ink: #151515;
+        --muted: #5e5b53;
+        --line: #c9c2b3;
+        --accent: #bb3f22;
+        --accent-soft: #eed3c7;
+        --card: #f8f6f0;
+        --contrast: #121212;
+        position: relative;
+        min-height: 100vh;
+        background: var(--paper);
+        color: var(--ink);
+        overflow: hidden;
+        padding: clamp(2.2rem, 5vw, 5rem) clamp(1rem, 4vw, 4.5rem) clamp(3rem, 5vw, 6rem);
+        font-family: 'Source Serif 4', 'Noto Serif SC', 'Songti SC', 'STSong', serif;
+      }
+
+      .texture {
+        position: absolute;
+        inset: 0;
+        background-image:
+          radial-gradient(circle at 20% 15%, rgba(187, 63, 34, 0.08), transparent 38%),
+          radial-gradient(circle at 76% 72%, rgba(0, 0, 0, 0.055), transparent 40%),
+          linear-gradient(to right, rgba(21, 21, 21, 0.025) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(21, 21, 21, 0.02) 1px, transparent 1px);
+        background-size: auto, auto, 28px 28px, 28px 28px;
+        pointer-events: none;
+      }
+
+      .story {
+        position: relative;
+        z-index: 1;
+        max-width: 1240px;
+        margin: 0 auto;
+        display: grid;
+        gap: clamp(2.4rem, 5vw, 4.2rem);
+      }
+
+      .hero,
+      .method,
+      .chartSection,
+      .limitSection,
+      .cta {
+        border: 1px solid var(--line);
+        background: linear-gradient(160deg, rgba(248, 246, 240, 0.92), rgba(245, 242, 234, 0.75));
+        box-shadow: 0 18px 40px rgba(15, 15, 15, 0.08);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(220px, 0.7fr);
+        gap: 2rem;
+        padding: clamp(1.5rem, 4vw, 3.2rem);
+      }
+
+      .kicker {
+        margin: 0;
+        font-family: 'Bebas Neue', 'Impact', 'Noto Sans SC', sans-serif;
+        letter-spacing: 0.15em;
+        font-size: 0.92rem;
+        color: var(--accent);
+      }
+
+      .title {
+        margin: 0.6rem 0 1rem;
+        font-size: clamp(2rem, 4.7vw, 4.1rem);
+        line-height: 1.08;
+        max-width: 18ch;
+      }
+
+      .lead {
+        margin: 0;
+        max-width: 56ch;
+        font-size: clamp(1rem, 1.8vw, 1.22rem);
+        line-height: 1.8;
+        color: var(--muted);
+      }
+
+      .stats {
+        margin: 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        align-content: start;
+        gap: 1rem;
+      }
+
+      .statItem {
+        margin: 0;
+        border-left: 3px solid var(--accent);
+        padding: 0.55rem 0 0.55rem 0.85rem;
+        background: rgba(187, 63, 34, 0.07);
+      }
+
+      .statItem dt {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .statItem dd {
+        margin: 0.35rem 0 0;
+        font-size: clamp(1.5rem, 2.6vw, 2rem);
+        font-family: 'Bebas Neue', 'Impact', 'Noto Sans SC', sans-serif;
+        letter-spacing: 0.03em;
+      }
+
+      .method {
+        display: grid;
+        grid-template-columns: minmax(230px, 0.9fr) minmax(0, 1.1fr);
+        gap: clamp(1.1rem, 3vw, 3rem);
+        padding: clamp(1.3rem, 3.8vw, 2.6rem);
+      }
+
+      .sectionTag,
+      .sectionTagDark {
+        margin: 0;
+        font-family: 'Bebas Neue', 'Impact', 'Noto Sans SC', sans-serif;
+        font-size: 0.85rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .sectionTag {
+        color: var(--accent);
+      }
+
+      .sectionTagDark {
+        color: #f0ece4;
+      }
+
+      .method h2,
+      .chartSection h2,
+      .limitSection h2,
+      .cta h2 {
+        margin: 0.6rem 0 0;
+        line-height: 1.2;
+        font-size: clamp(1.45rem, 2.5vw, 2.15rem);
+      }
+
+      .methodList {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .methodList li {
+        border-bottom: 1px dashed var(--line);
+        padding-bottom: 0.65rem;
+        line-height: 1.72;
+        color: #353331;
+      }
+
+      .chartSection {
+        padding: clamp(1.2rem, 3.8vw, 2.8rem);
+      }
+
+      .chartHeader {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: clamp(1.2rem, 2.6vw, 2.2rem);
+      }
+
+      .chartGrid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: clamp(0.95rem, 2vw, 1.25rem);
+      }
+
+      .chartCard {
+        border: 1px solid var(--line);
+        background: #faf8f3;
+        padding: clamp(1rem, 2.1vw, 1.45rem);
+        display: grid;
+        align-content: start;
+        gap: 0.68rem;
+      }
+
+      .chartCard h3 {
+        margin: 0;
+        font-size: clamp(1.05rem, 2vw, 1.36rem);
+      }
+
+      .chartDesc {
+        margin: 0;
+        line-height: 1.67;
+        color: var(--muted);
+        font-size: 0.97rem;
+      }
+
+      .chartWide {
+        grid-column: span 8;
+      }
+
+      .chartTall {
+        grid-column: span 4;
+      }
+
+      .chartNarrow {
+        grid-column: span 12;
+      }
+
+      .chartSvg {
+        width: 100%;
+        border-top: 1px solid var(--line);
+        padding-top: 0.75rem;
+      }
+
+      .gridLine {
+        stroke: rgba(21, 21, 21, 0.13);
+        stroke-width: 1;
+      }
+
+      .axisStrong {
+        stroke: rgba(21, 21, 21, 0.45);
+        stroke-width: 1.2;
+      }
+
+      .axisLabel {
+        font-size: 11px;
+        fill: #6a655b;
+        font-family: 'IBM Plex Sans', 'Segoe UI', 'Noto Sans SC', sans-serif;
+      }
+
+      .lineControl,
+      .lineVariant {
+        fill: none;
+        stroke-width: 2.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .lineControl {
+        stroke: #4b4640;
+        stroke-dasharray: 5 4;
+      }
+
+      .lineVariant {
+        stroke: var(--accent);
+      }
+
+      .dotControl {
+        fill: #4b4640;
+      }
+
+      .dotVariant {
+        fill: var(--accent);
+      }
+
+      .legend {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        font-size: 0.88rem;
+        color: var(--muted);
+      }
+
+      .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+      }
+
+      .legendControl,
+      .legendVariant {
+        display: inline-block;
+        width: 22px;
+        height: 3px;
+      }
+
+      .legendControl {
+        background: #4b4640;
+      }
+
+      .legendVariant {
+        background: var(--accent);
+      }
+
+      .retentionWrap {
+        margin-top: 0.3rem;
+        display: grid;
+        gap: 0.95rem;
+      }
+
+      .retentionRow {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .retentionTop {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.8rem;
+      }
+
+      .rowLabel {
+        font-size: 0.93rem;
+      }
+
+      .rowDelta {
+        font-size: 0.9rem;
+        font-family: 'IBM Plex Sans', 'Segoe UI', 'Noto Sans SC', sans-serif;
+        color: var(--accent);
+      }
+
+      .barTrack {
+        position: relative;
+        height: 30px;
+        border: 1px solid var(--line);
+        background: repeating-linear-gradient(to right, #f3efe5 0, #f3efe5 16px, #ece7da 16px, #ece7da 32px);
+        overflow: hidden;
+      }
+
+      .barControl,
+      .barVariant {
+        position: absolute;
+        left: 0;
+        height: 12px;
+        border-right: 1px solid rgba(0, 0, 0, 0.15);
+      }
+
+      .barControl {
+        top: 3px;
+        background: rgba(58, 54, 49, 0.84);
+      }
+
+      .barVariant {
+        bottom: 3px;
+        background: var(--accent);
+      }
+
+      .rowValues {
+        margin: 0;
+        font-size: 0.81rem;
+        color: #666055;
+      }
+
+      .intervalWrap {
+        margin-top: 0.45rem;
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .intervalRow {
+        display: grid;
+        grid-template-columns: 120px minmax(0, 1fr) 58px;
+        align-items: center;
+        gap: 0.7rem;
+      }
+
+      .intervalTrack {
+        position: relative;
+        height: 26px;
+        border: 1px solid var(--line);
+        background: #f3efe5;
+      }
+
+      .intervalZero {
+        position: absolute;
+        top: -1px;
+        bottom: -1px;
+        width: 1.5px;
+        background: #141414;
+      }
+
+      .intervalRange {
+        position: absolute;
+        top: 7px;
+        height: 10px;
+        background: rgba(187, 63, 34, 0.34);
+        border: 1px solid rgba(187, 63, 34, 0.55);
+      }
+
+      .intervalDot {
+        position: absolute;
+        top: 5px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        transform: translateX(-50%);
+        background: var(--accent);
+        box-shadow: 0 0 0 2px #faf8f3;
+      }
+
+      .limitSection {
+        background: linear-gradient(145deg, #1b1b1b, #131313);
+        color: #f5f1e7;
+        padding: clamp(1.3rem, 3.6vw, 2.55rem);
+        display: grid;
+        grid-template-columns: minmax(220px, 0.95fr) minmax(0, 1.05fr);
+        gap: 1.25rem;
+      }
+
+      .limitList {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.8rem;
+      }
+
+      .limitList li {
+        border-left: 2px solid rgba(238, 211, 199, 0.46);
+        padding-left: 0.85rem;
+        color: #ded9cd;
+        line-height: 1.72;
+      }
+
+      .cta {
+        padding: clamp(1.25rem, 4vw, 2.7rem);
+        display: grid;
+        gap: 1.1rem;
+      }
+
+      .ctaText {
+        margin: 0.55rem 0 0;
+        line-height: 1.72;
+        color: var(--muted);
+      }
+
+      .actionList {
+        margin: 0;
+        padding-left: 1.25rem;
+        display: grid;
+        gap: 0.48rem;
+        line-height: 1.62;
+      }
+
+      .ctaActions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin-top: 0.4rem;
+      }
+
+      .primaryButton,
+      .ghostButton {
+        border: 1px solid transparent;
+        font-family: 'IBM Plex Sans', 'Segoe UI', 'Noto Sans SC', sans-serif;
+        font-size: 0.93rem;
+        padding: 0.62rem 1.08rem;
+        cursor: pointer;
+        transition: transform 0.28s ease, box-shadow 0.28s ease, background-color 0.28s ease;
+      }
+
+      .primaryButton {
+        background: var(--accent);
+        color: #fff9f5;
+      }
+
+      .primaryButton:hover,
+      .primaryButton:focus-visible {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(187, 63, 34, 0.28);
+      }
+
+      .ghostButton {
+        border-color: var(--line);
+        background: transparent;
+        color: #2a2926;
+      }
+
+      .ghostButton:hover,
+      .ghostButton:focus-visible {
+        background: #ebe5d8;
+      }
+
+      .primaryButton:focus-visible,
+      .ghostButton:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .reveal,
+      .revealSoft,
+      .revealSoftLate {
+        opacity: 0;
+        transform: translateY(12px);
+        animation: reveal 0.7s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+      }
+
+      .revealSoft {
+        animation-delay: 0.12s;
+      }
+
+      .revealSoftLate {
+        animation-delay: 0.22s;
+      }
+
+      @keyframes reveal {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .hero,
+        .method,
+        .limitSection {
+          grid-template-columns: 1fr;
+        }
+
+        .chartWide,
+        .chartTall,
+        .chartNarrow {
+          grid-column: span 12;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .page {
+          padding: 1.25rem 0.9rem 3rem;
+        }
+
+        .title {
+          max-width: 100%;
+        }
+
+        .stats {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 0.55rem;
+        }
+
+        .statItem {
+          border-left-width: 2px;
+          padding: 0.45rem 0.45rem 0.45rem 0.62rem;
+        }
+
+        .intervalRow {
+          grid-template-columns: 1fr;
+          gap: 0.45rem;
+        }
+
+        .ctaActions {
+          flex-direction: column;
+        }
+
+        .primaryButton,
+        .ghostButton {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 375px) {
+        .hero,
+        .method,
+        .chartSection,
+        .limitSection,
+        .cta {
+          padding: 1rem;
+        }
+
+        .stats {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .reveal,
+        .revealSoft,
+        .revealSoftLate,
+        .primaryButton,
+        .ghostButton {
+          animation: none !important;
+          transition: none !important;
+          transform: none !important;
+          opacity: 1 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="texture" aria-hidden="true"></div>
+      <article class="story">
+        <header class="hero reveal">
+          <div>
+            <p class="kicker">实验叙事 · 增长实验 042</p>
+            <h1 class="title">首屏文案改版，让新用户 7 日激活率提升 18.4%</h1>
+            <p class="lead">
+              在 42,816 名新访客随机对照实验中，实验组显著优于对照组，结论可在 3 分钟内被业务团队直接采纳并执行。
+            </p>
+          </div>
+
+          <dl class="stats">
+            <div class="statItem">
+              <dt>样本量</dt>
+              <dd>42,816</dd>
+            </div>
+            <div class="statItem">
+              <dt>统计置信度</dt>
+              <dd>95%</dd>
+            </div>
+            <div class="statItem">
+              <dt>净提升</dt>
+              <dd>+2.6pp</dd>
+            </div>
+          </dl>
+        </header>
+
+        <section class="method revealSoft" aria-labelledby="method-title">
+          <div>
+            <p class="sectionTag">方法说明</p>
+            <h2 id="method-title">我们如何确保这个结论可靠</h2>
+          </div>
+          <ul class="methodList">
+            <li>随机分流 50/50，对照组与实验组流量质量一致。</li>
+            <li>以首访后 7 日激活行为为主指标，避免短期点击噪声。</li>
+            <li>剔除异常会话与机器人流量，维持口径统一。</li>
+            <li>结果按设备、来源、网络条件分层复核。</li>
+          </ul>
+        </section>
+
+        <section class="chartSection revealSoftLate" aria-labelledby="chart-title">
+          <div class="chartHeader">
+            <p class="sectionTag">关键证据</p>
+            <h2 id="chart-title">3 个图，快速看懂提升来自哪里</h2>
+          </div>
+
+          <div class="chartGrid">
+            <article class="chartCard chartWide">
+              <h3>图 1 · 7 日激活率趋势</h3>
+              <p class="chartDesc">实验组在第 2 天后稳定拉开差距，说明改版不仅提高首日触发，也改善后续完成路径。</p>
+              <svg viewBox="0 0 560 280" class="chartSvg" role="img" aria-labelledby="line-chart-title line-chart-desc">
+                <title id="line-chart-title">对照组与实验组 7 日激活率趋势线</title>
+                <desc id="line-chart-desc">实验组曲线全程高于对照组，D7 达到 16.7%，对照组为 14.1%。</desc>
+
+                <g>
+                  <line x1="52" y1="222" x2="520" y2="222" class="gridLine"></line>
+                  <text x="22" y="226" class="axisLabel">8%</text>
+                </g>
+                <g>
+                  <line x1="52" y1="189.67" x2="520" y2="189.67" class="gridLine"></line>
+                  <text x="22" y="193.67" class="axisLabel">10%</text>
+                </g>
+                <g>
+                  <line x1="52" y1="157.33" x2="520" y2="157.33" class="gridLine"></line>
+                  <text x="22" y="161.33" class="axisLabel">12%</text>
+                </g>
+                <g>
+                  <line x1="52" y1="125" x2="520" y2="125" class="gridLine"></line>
+                  <text x="22" y="129" class="axisLabel">14%</text>
+                </g>
+                <g>
+                  <line x1="52" y1="92.67" x2="520" y2="92.67" class="gridLine"></line>
+                  <text x="22" y="96.67" class="axisLabel">16%</text>
+                </g>
+                <g>
+                  <line x1="52" y1="60.33" x2="520" y2="60.33" class="gridLine"></line>
+                  <text x="22" y="64.33" class="axisLabel">18%</text>
+                </g>
+                <g>
+                  <line x1="52" y1="28" x2="520" y2="28" class="gridLine"></line>
+                  <text x="22" y="32" class="axisLabel">20%</text>
+                </g>
+
+                <line x1="52" y1="222" x2="520" y2="222" class="axisStrong"></line>
+                <polyline points="52,167.83 124,155.68 196,149.25 268,141.17 340,131.47 412,126.62 484,123.37" class="lineControl"></polyline>
+                <polyline points="52,137.93 124,115.3 196,107.22 268,100.75 340,92.67 412,89.43 484,81.35" class="lineVariant"></polyline>
+
+                <g>
+                  <circle cx="52" cy="167.83" r="3" class="dotControl"></circle>
+                  <circle cx="52" cy="137.93" r="3.5" class="dotVariant"></circle>
+                  <text x="42" y="246" class="axisLabel">D1</text>
+                </g>
+                <g>
+                  <circle cx="124" cy="155.68" r="3" class="dotControl"></circle>
+                  <circle cx="124" cy="115.3" r="3.5" class="dotVariant"></circle>
+                  <text x="114" y="246" class="axisLabel">D2</text>
+                </g>
+                <g>
+                  <circle cx="196" cy="149.25" r="3" class="dotControl"></circle>
+                  <circle cx="196" cy="107.22" r="3.5" class="dotVariant"></circle>
+                  <text x="186" y="246" class="axisLabel">D3</text>
+                </g>
+                <g>
+                  <circle cx="268" cy="141.17" r="3" class="dotControl"></circle>
+                  <circle cx="268" cy="100.75" r="3.5" class="dotVariant"></circle>
+                  <text x="258" y="246" class="axisLabel">D4</text>
+                </g>
+                <g>
+                  <circle cx="340" cy="131.47" r="3" class="dotControl"></circle>
+                  <circle cx="340" cy="92.67" r="3.5" class="dotVariant"></circle>
+                  <text x="330" y="246" class="axisLabel">D5</text>
+                </g>
+                <g>
+                  <circle cx="412" cy="126.62" r="3" class="dotControl"></circle>
+                  <circle cx="412" cy="89.43" r="3.5" class="dotVariant"></circle>
+                  <text x="402" y="246" class="axisLabel">D6</text>
+                </g>
+                <g>
+                  <circle cx="484" cy="123.37" r="3" class="dotControl"></circle>
+                  <circle cx="484" cy="81.35" r="3.5" class="dotVariant"></circle>
+                  <text x="474" y="246" class="axisLabel">D7</text>
+                </g>
+              </svg>
+              <div class="legend">
+                <span><i class="legendControl"></i>对照组</span>
+                <span><i class="legendVariant"></i>实验组</span>
+              </div>
+            </article>
+
+            <article class="chartCard chartTall">
+              <h3>图 2 · 分人群留存对比</h3>
+              <p class="chartDesc">移动端新客受益最明显，低速网络提升偏小，是下阶段优化重点。</p>
+              <div class="retentionWrap" role="img" aria-label="分人群留存率：每行包含对照组和实验组两条横向条形。">
+                <div class="retentionRow">
+                  <div class="retentionTop">
+                    <span class="rowLabel">轻度访问</span>
+                    <span class="rowDelta">+6.4pp</span>
+                  </div>
+                  <div class="barTrack">
+                    <span class="barControl" style="width: 36.4%"></span>
+                    <span class="barVariant" style="width: 42.8%"></span>
+                  </div>
+                  <p class="rowValues">对照 36.4% · 实验 42.8%</p>
+                </div>
+
+                <div class="retentionRow">
+                  <div class="retentionTop">
+                    <span class="rowLabel">移动端新客</span>
+                    <span class="rowDelta">+8.3pp</span>
+                  </div>
+                  <div class="barTrack">
+                    <span class="barControl" style="width: 31.2%"></span>
+                    <span class="barVariant" style="width: 39.5%"></span>
+                  </div>
+                  <p class="rowValues">对照 31.2% · 实验 39.5%</p>
+                </div>
+
+                <div class="retentionRow">
+                  <div class="retentionTop">
+                    <span class="rowLabel">高意向来源</span>
+                    <span class="rowDelta">+3.3pp</span>
+                  </div>
+                  <div class="barTrack">
+                    <span class="barControl" style="width: 44.1%"></span>
+                    <span class="barVariant" style="width: 47.4%"></span>
+                  </div>
+                  <p class="rowValues">对照 44.1% · 实验 47.4%</p>
+                </div>
+
+                <div class="retentionRow">
+                  <div class="retentionTop">
+                    <span class="rowLabel">低速网络</span>
+                    <span class="rowDelta">+1.4pp</span>
+                  </div>
+                  <div class="barTrack">
+                    <span class="barControl" style="width: 28.9%"></span>
+                    <span class="barVariant" style="width: 30.3%"></span>
+                  </div>
+                  <p class="rowValues">对照 28.9% · 实验 30.3%</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="chartCard chartNarrow">
+              <h3>图 3 · 置信区间</h3>
+              <p class="chartDesc">核心指标区间均高于 0，提升具有统计意义，其中 7 日激活率最稳健。</p>
+              <div class="intervalWrap" role="img" aria-label="各指标 uplift 置信区间，横轴范围为 -1 到 +6 个百分点。">
+                <div class="intervalRow">
+                  <span class="rowLabel">注册完成率</span>
+                  <div class="intervalTrack">
+                    <span class="intervalZero" style="left: 14.29%"></span>
+                    <span class="intervalRange" style="left: 40%; width: 38.57%"></span>
+                    <span class="intervalDot" style="left: 60%"></span>
+                  </div>
+                  <span class="rowDelta">3.2pp</span>
+                </div>
+
+                <div class="intervalRow">
+                  <span class="rowLabel">首单转化率</span>
+                  <div class="intervalTrack">
+                    <span class="intervalZero" style="left: 14.29%"></span>
+                    <span class="intervalRange" style="left: 22.86%; width: 30%"></span>
+                    <span class="intervalDot" style="left: 35.71%"></span>
+                  </div>
+                  <span class="rowDelta">1.5pp</span>
+                </div>
+
+                <div class="intervalRow">
+                  <span class="rowLabel">7日激活率</span>
+                  <div class="intervalTrack">
+                    <span class="intervalZero" style="left: 14.29%"></span>
+                    <span class="intervalRange" style="left: 55.71%; width: 34.29%"></span>
+                    <span class="intervalDot" style="left: 72.86%"></span>
+                  </div>
+                  <span class="rowDelta">4.1pp</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="limitSection revealSoftLate" aria-labelledby="limit-title">
+          <div>
+            <p class="sectionTagDark">反例 / 局限</p>
+            <h2 id="limit-title">这份结果不能直接回答的问题</h2>
+          </div>
+          <ul class="limitList">
+            <li>节假日流量仅覆盖 3 天，长期波动尚未完全吸收。</li>
+            <li>低速网络用户提升有限，说明页面素材仍偏重。</li>
+            <li>样本来自新用户首访，不能直接外推到老用户召回场景。</li>
+          </ul>
+        </section>
+
+        <section class="cta revealSoftLate" aria-labelledby="cta-title">
+          <div>
+            <p class="sectionTag">最终建议</p>
+            <h2 id="cta-title">建议本周进入分渠道灰度上线</h2>
+            <p class="ctaText">优先扩展移动端新客入口，同时设定低速网络保护策略，确保收益可持续放大。</p>
+          </div>
+          <ol class="actionList">
+            <li>按来源渠道进行灰度放量，优先移动端新客。</li>
+            <li>补做低速网络轻量版本并复测。</li>
+            <li>在次月复盘中加入 14 日留存与收入指标。</li>
+          </ol>
+          <div class="ctaActions">
+            <button type="button" class="primaryButton">发起灰度评审</button>
+            <button type="button" class="ghostButton">下载摘要给业务团队</button>
+          </div>
+        </section>
+      </article>
+    </main>
+  </body>
+</html>

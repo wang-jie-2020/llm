@@ -1,0 +1,1544 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>全球业务导航大屏</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --panel-2: #0f1a30;
+      --primary: #00d1ff;
+      --secondary: #3b82f6;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --text: #e6edf7;
+      --text-sub: #9fb0c7;
+      --border: #22324a;
+      --chip: #162338;
+      --shadow: 0 14px 42px rgba(1, 8, 24, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 16% 10%, rgba(59, 130, 246, 0.2), transparent 32%),
+        radial-gradient(circle at 84% 84%, rgba(0, 209, 255, 0.18), transparent 28%),
+        linear-gradient(160deg, #081122 0%, #0b1220 58%, #0d1627 100%);
+    }
+
+    .dashboard {
+      min-height: 100vh;
+      padding: 16px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(19, 33, 54, 0.95), rgba(14, 24, 42, 0.96));
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .header {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 12px;
+    }
+
+    .brand {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      min-height: 96px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: -110px;
+      top: -120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 209, 255, 0.24), rgba(0, 209, 255, 0));
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      margin: 0;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-sub);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .snapshot {
+      margin: 0;
+      font-size: 14px;
+      color: #b6c5da;
+    }
+
+    .toolbar {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      grid-template-rows: auto auto;
+    }
+
+    .filters {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filters label {
+      font-size: 14px;
+      color: var(--text-sub);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: #0f1b31;
+      border: 1px solid #23395a;
+      border-radius: 8px;
+    }
+
+    select {
+      font-size: 14px;
+      color: var(--text);
+      background: transparent;
+      border: none;
+      outline: none;
+    }
+
+    option {
+      color: #0b1220;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(128px, 1fr));
+      gap: 10px;
+    }
+
+    .kpi {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #253b5f;
+      background: linear-gradient(180deg, #111f37, #0d182d);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi::after {
+      content: "";
+      position: absolute;
+      left: -18px;
+      top: -18px;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.16), transparent 72%);
+      pointer-events: none;
+    }
+
+    .kpi p {
+      margin: 0;
+      color: #a8bad2;
+      font-size: 14px;
+    }
+
+    .kpi strong {
+      display: block;
+      margin-top: 4px;
+      font-family: "DIN Alternate", "Bahnschrift", sans-serif;
+      font-size: 32px;
+      line-height: 1.08;
+      letter-spacing: 0.02em;
+      color: #f3f7ff;
+    }
+
+    .main {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 3fr 1fr;
+      gap: 12px;
+    }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .section {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #e9f1ff;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .rank-item,
+    .channel-item,
+    .risk-item {
+      display: grid;
+      gap: 6px;
+      font-size: 16px;
+    }
+
+    .rank-head,
+    .channel-head,
+    .risk-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .minor {
+      color: var(--text-sub);
+      font-size: 14px;
+    }
+
+    .bar {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #1a2a42;
+      overflow: hidden;
+      border: 1px solid #2b4468;
+    }
+
+    .bar > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #2f6ddb, #00d1ff);
+      transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .map-shell {
+      min-height: 0;
+      padding: 10px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 2px 4px;
+    }
+
+    .map-head p {
+      margin: 0;
+      color: var(--text-sub);
+      font-size: 14px;
+    }
+
+    .map-stage {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #253f61;
+      background:
+        linear-gradient(180deg, rgba(14, 27, 46, 0.7), rgba(10, 20, 35, 0.8)),
+        radial-gradient(circle at 50% 40%, rgba(59, 130, 246, 0.24), rgba(11, 18, 32, 0));
+      min-height: 480px;
+    }
+
+    #worldMap {
+      width: 100%;
+      height: 100%;
+      min-height: 480px;
+      display: block;
+    }
+
+    .country {
+      cursor: pointer;
+    }
+
+    .country path {
+      fill: #1f3556;
+      stroke: #44658f;
+      stroke-width: 1.2;
+      transition: fill 0.34s ease, stroke 0.24s ease, transform 0.24s ease;
+      transform-origin: center;
+    }
+
+    .country:hover path {
+      stroke: #8adfff;
+      transform: translateY(-1px);
+    }
+
+    .country.active path {
+      stroke: #00d1ff;
+      stroke-width: 1.8;
+      filter: drop-shadow(0 0 8px rgba(0, 209, 255, 0.45));
+    }
+
+    .flow {
+      fill: none;
+      stroke: url(#flowGradient);
+      stroke-width: 2;
+      stroke-dasharray: 8 7;
+      animation: flowMove 10s linear infinite;
+      opacity: 0.55;
+      transition: opacity 0.35s ease, stroke-width 0.35s ease;
+    }
+
+    @keyframes flowMove {
+      to { stroke-dashoffset: -220; }
+    }
+
+    .tooltip {
+      position: absolute;
+      min-width: 170px;
+      pointer-events: none;
+      z-index: 20;
+      border: 1px solid #34557e;
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: rgba(8, 17, 31, 0.95);
+      box-shadow: 0 12px 28px rgba(1, 8, 18, 0.55);
+      font-size: 14px;
+      color: #e8f2ff;
+      display: none;
+    }
+
+    .tooltip b {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 16px;
+    }
+
+    .tooltip .line {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: #c2d4eb;
+      line-height: 1.5;
+    }
+
+    .map-legend {
+      padding: 0 4px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #c3d2e6;
+    }
+
+    .legend-bar {
+      width: 220px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #172841, #1f4f8a, #00d1ff);
+      border: 1px solid #2d4f7a;
+    }
+
+    #trendSvg {
+      width: 100%;
+      min-height: 200px;
+      display: block;
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(11, 20, 37, 0.75), rgba(13, 23, 40, 0.45));
+      border: 1px solid #274267;
+    }
+
+    .risk-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .risk-item {
+      border: 1px solid #2a4467;
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: #0f1b31;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid transparent;
+      background: #162338;
+    }
+
+    .chip.low {
+      color: #90f3b4;
+      border-color: rgba(34, 197, 94, 0.6);
+      background: rgba(34, 197, 94, 0.18);
+    }
+
+    .chip.medium {
+      color: #ffd48d;
+      border-color: rgba(245, 158, 11, 0.65);
+      background: rgba(245, 158, 11, 0.2);
+    }
+
+    .chip.high {
+      color: #ffb3b3;
+      border-color: rgba(239, 68, 68, 0.7);
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    .timeline {
+      padding: 10px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .timeline-track {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .timeline-track::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      top: 16px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.25), rgba(0, 209, 255, 0.45), rgba(59, 130, 246, 0.25));
+    }
+
+    .event {
+      position: relative;
+      padding-top: 26px;
+      border: 1px solid #264062;
+      border-radius: 10px;
+      background: #0f1b30;
+      overflow: hidden;
+      min-height: 84px;
+    }
+
+    .event::before {
+      content: "";
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00d1ff;
+      box-shadow: 0 0 0 4px rgba(0, 209, 255, 0.18);
+    }
+
+    .event .time {
+      padding: 0 12px;
+      font-size: 13px;
+      color: #9fb3cf;
+    }
+
+    .event .title {
+      padding: 2px 12px 10px;
+      font-size: 15px;
+      color: #e7f0ff;
+      line-height: 1.35;
+    }
+
+    .detail-overlay {
+      position: fixed;
+      inset: 18px;
+      border-radius: 14px;
+      z-index: 40;
+      border: 1px solid #2b466b;
+      background:
+        radial-gradient(circle at 72% 12%, rgba(0, 209, 255, 0.16), transparent 36%),
+        linear-gradient(165deg, rgba(10, 18, 34, 0.98), rgba(8, 17, 31, 0.98));
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+      padding: 14px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 12px;
+      transform: translateY(24px) scale(0.985);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.32s ease;
+    }
+
+    .detail-overlay.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .detail-top {
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    #backBtn {
+      font-size: 16px;
+      color: #e8f1ff;
+      background: #13243f;
+      border: 1px solid #2b4971;
+      border-radius: 8px;
+      padding: 9px 10px;
+      cursor: pointer;
+      transition: background 0.24s ease;
+    }
+
+    #backBtn:hover {
+      background: #183157;
+    }
+
+    #detailTitle {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+    }
+
+    .detail-kpis {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .dk {
+      min-width: 130px;
+      border: 1px solid #2a4467;
+      background: #0e1d34;
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+
+    .dk .label {
+      font-size: 13px;
+      color: #a8bdd8;
+    }
+
+    .dk .val {
+      margin-top: 4px;
+      font-size: 24px;
+      font-family: "DIN Alternate", "Bahnschrift", sans-serif;
+      line-height: 1;
+    }
+
+    .detail-grid {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1.7fr 1fr 1fr;
+      grid-auto-rows: minmax(168px, 1fr);
+      gap: 10px;
+    }
+
+    .detail-card {
+      min-height: 0;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .detail-card h3 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .detail-card.wide {
+      grid-column: 1 / span 2;
+    }
+
+    .mini-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: auto;
+    }
+
+    .mini-row {
+      border: 1px solid #2b4468;
+      background: #0f1c33;
+      border-radius: 8px;
+      padding: 7px 8px;
+      display: grid;
+      gap: 5px;
+      font-size: 15px;
+    }
+
+    .mini-row .line {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .mini-bar {
+      height: 7px;
+      width: 100%;
+      border-radius: 999px;
+      background: #1a2b44;
+      border: 1px solid #2a4569;
+      overflow: hidden;
+    }
+
+    .mini-bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #2f6ddb, #00d1ff);
+    }
+
+    .funnel {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 7px;
+      align-items: end;
+      min-height: 116px;
+      margin-top: auto;
+    }
+
+    .funnel .stage {
+      border: 1px solid #2e4a6f;
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(47, 109, 219, 0.3), rgba(0, 209, 255, 0.12));
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      color: #ebf3ff;
+      font-size: 13px;
+      padding-bottom: 5px;
+      min-height: 26px;
+    }
+
+    .funnel .stage b {
+      position: absolute;
+      top: 4px;
+      left: 5px;
+      right: 5px;
+      text-align: center;
+      font-size: 12px;
+      color: #c2d7f3;
+      font-weight: 500;
+    }
+
+    .risk-bullets {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: auto;
+    }
+
+    .risk-bullets li {
+      border: 1px solid #2d476a;
+      border-radius: 8px;
+      background: #0f1d34;
+      padding: 7px 8px;
+      font-size: 14px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .city-label {
+      font-size: 13px;
+      fill: #d9e8ff;
+    }
+
+    @media (max-width: 1600px) {
+      .kpis {
+        grid-template-columns: repeat(3, minmax(128px, 1fr));
+      }
+
+      .header {
+        grid-template-columns: 280px 1fr;
+      }
+
+      .main {
+        grid-template-columns: 1fr;
+      }
+
+      .map-stage {
+        min-height: 420px;
+      }
+
+      #worldMap {
+        min-height: 420px;
+      }
+
+      .timeline-track {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .detail-card.wide {
+        grid-column: auto;
+      }
+
+      .detail-top {
+        grid-template-columns: 120px 1fr;
+      }
+
+      .detail-kpis {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <header class="header">
+      <section class="brand card">
+        <p class="eyebrow">Global Business Command</p>
+        <h1>全球业务导航大屏</h1>
+        <p id="snapshotTime" class="snapshot"></p>
+      </section>
+      <section class="toolbar card">
+        <div class="filters">
+          <label>时间
+            <select id="timeRange">
+              <option value="7d">近7天</option>
+              <option value="30d" selected>近30天</option>
+              <option value="90d">近90天</option>
+            </select>
+          </label>
+          <label>区域
+            <select id="regionFilter">
+              <option value="all" selected>全球</option>
+              <option value="NA">北美</option>
+              <option value="EU">欧洲</option>
+              <option value="APAC">亚太</option>
+              <option value="LATAM">拉美</option>
+              <option value="MEA">中东非</option>
+            </select>
+          </label>
+          <label>业务线
+            <select id="lineFilter">
+              <option value="all" selected>全部</option>
+              <option value="cloud">云服务</option>
+              <option value="hardware">智能硬件</option>
+              <option value="subscription">数字订阅</option>
+            </select>
+          </label>
+          <label>渠道
+            <select id="channelFilter">
+              <option value="all" selected>全部</option>
+              <option value="direct">直营</option>
+              <option value="partner">伙伴</option>
+              <option value="ecommerce">电商</option>
+            </select>
+          </label>
+        </div>
+        <div class="kpis">
+          <article class="kpi">
+            <p>营收</p>
+            <strong id="kpiRevenue" data-value="0">$0</strong>
+          </article>
+          <article class="kpi">
+            <p>订单</p>
+            <strong id="kpiOrders" data-value="0">0</strong>
+          </article>
+          <article class="kpi">
+            <p>活跃客户</p>
+            <strong id="kpiCustomers" data-value="0">0</strong>
+          </article>
+          <article class="kpi">
+            <p>毛利率</p>
+            <strong id="kpiMargin" data-value="0">0%</strong>
+          </article>
+          <article class="kpi">
+            <p>履约率</p>
+            <strong id="kpiFulfillment" data-value="0">0%</strong>
+          </article>
+          <article class="kpi">
+            <p>告警数</p>
+            <strong id="kpiAlerts" data-value="0">0</strong>
+          </article>
+        </div>
+      </section>
+    </header>
+
+    <main class="main">
+      <aside class="panel">
+        <section class="section card">
+          <h2>区域排名</h2>
+          <div id="regionRanking" class="stack"></div>
+        </section>
+        <section class="section card">
+          <h2>渠道结构</h2>
+          <div id="channelMix" class="stack"></div>
+        </section>
+      </aside>
+
+      <section class="map-shell card">
+        <div class="map-head">
+          <h2>全球业务热力地图</h2>
+          <p>Hover 查看国家卡片 · Click 进入二级详情</p>
+        </div>
+        <div class="map-stage" id="mapStage">
+          <svg id="worldMap" viewBox="0 0 1200 560" aria-label="全球业务地图">
+            <defs>
+              <linearGradient id="flowGradient" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.2"></stop>
+                <stop offset="50%" stop-color="#00d1ff" stop-opacity="1"></stop>
+                <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.2"></stop>
+              </linearGradient>
+              <radialGradient id="oceanGlow" cx="50%" cy="45%" r="70%">
+                <stop offset="0%" stop-color="#1d365a" stop-opacity="0.32"></stop>
+                <stop offset="100%" stop-color="#0b1220" stop-opacity="0"></stop>
+              </radialGradient>
+            </defs>
+            <rect x="0" y="0" width="1200" height="560" fill="url(#oceanGlow)"></rect>
+            <g opacity="0.14" fill="#2a456c">
+              <path d="M110 166 L278 132 L378 166 L402 222 L342 262 L198 248 L124 216 Z"></path>
+              <path d="M332 260 L458 272 L492 334 L446 426 L366 416 L316 326 Z"></path>
+              <path d="M540 182 L700 156 L808 190 L782 264 L622 266 L540 236 Z"></path>
+              <path d="M590 306 L722 300 L772 344 L742 430 L620 442 L574 378 Z"></path>
+              <path d="M792 182 L956 162 L1062 204 L1038 300 L856 302 L796 248 Z"></path>
+              <path d="M904 340 L1062 332 L1110 402 L1048 452 L918 438 L884 388 Z"></path>
+            </g>
+
+            <path class="flow" data-from="CN" data-to="US" d="M892 226 C760 178, 480 182, 306 236"></path>
+            <path class="flow" data-from="DE" data-to="US" d="M626 222 C520 188, 420 194, 308 232"></path>
+            <path class="flow" data-from="US" data-to="BR" d="M298 248 C336 270, 370 298, 408 334"></path>
+            <path class="flow" data-from="IN" data-to="DE" d="M804 294 C742 284, 696 258, 628 228"></path>
+            <path class="flow" data-from="AU" data-to="CN" d="M986 404 C966 336, 936 292, 900 236"></path>
+
+            <g class="country" data-code="CA"><path d="M170 170 L230 145 L305 160 L338 188 L298 205 L236 198 L185 190 Z"></path></g>
+            <g class="country" data-code="US"><path d="M180 220 L250 205 L300 215 L330 245 L310 270 L250 275 L195 255 Z"></path></g>
+            <g class="country" data-code="BR"><path d="M360 300 L415 285 L452 310 L447 360 L420 405 L380 390 L352 345 Z"></path></g>
+            <g class="country" data-code="FR"><path d="M570 222 L594 215 L608 230 L598 252 L575 248 L562 234 Z"></path></g>
+            <g class="country" data-code="DE"><path d="M600 210 L620 200 L637 215 L632 236 L612 242 L598 228 Z"></path></g>
+            <g class="country" data-code="ZA"><path d="M620 365 L662 353 L690 376 L680 410 L646 425 L618 402 Z"></path></g>
+            <g class="country" data-code="IN"><path d="M770 270 L806 260 L826 285 L814 322 L782 332 L758 302 Z"></path></g>
+            <g class="country" data-code="CN"><path d="M830 215 L895 200 L950 220 L964 250 L930 274 L865 268 L824 242 Z"></path></g>
+            <g class="country" data-code="AU"><path d="M930 370 L998 360 L1045 387 L1032 430 L968 442 L922 410 Z"></path></g>
+          </svg>
+          <div class="tooltip" id="tooltip"></div>
+        </div>
+        <div class="map-legend">
+          <span>业务强度</span>
+          <div class="legend-bar"></div>
+          <span>低 → 高</span>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <section class="section card">
+          <h2>营收趋势</h2>
+          <svg id="trendSvg" viewBox="0 0 360 210" aria-label="趋势图"></svg>
+        </section>
+        <section class="section card">
+          <h2>风险与异常</h2>
+          <ul id="riskList" class="risk-list"></ul>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="timeline card">
+      <h2>关键时间轴</h2>
+      <div id="timelineTrack" class="timeline-track"></div>
+    </footer>
+  </div>
+
+  <section id="detailOverlay" class="detail-overlay" aria-hidden="true">
+    <div class="detail-top">
+      <button id="backBtn">← 返回全球</button>
+      <div>
+        <p class="eyebrow">Country Drill-down</p>
+        <h2 id="detailTitle">-</h2>
+      </div>
+      <div class="detail-kpis">
+        <div class="dk"><div class="label">营收</div><div class="val" id="dRevenue">-</div></div>
+        <div class="dk"><div class="label">订单</div><div class="val" id="dOrders">-</div></div>
+        <div class="dk"><div class="label">毛利率</div><div class="val" id="dMargin">-</div></div>
+        <div class="dk"><div class="label">履约率</div><div class="val" id="dFulfillment">-</div></div>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <section class="detail-card card wide">
+        <h3>城市热力</h3>
+        <div id="cityHeat" style="min-height: 220px"></div>
+      </section>
+      <section class="detail-card card">
+        <h3>客户结构</h3>
+        <div id="customerStruct" class="mini-stack"></div>
+      </section>
+      <section class="detail-card card">
+        <h3>订单漏斗</h3>
+        <div id="funnel" class="funnel"></div>
+      </section>
+      <section class="detail-card card">
+        <h3>履约时效</h3>
+        <div id="sla" class="mini-stack"></div>
+      </section>
+      <section class="detail-card card">
+        <h3>利润构成</h3>
+        <div id="profit" class="mini-stack"></div>
+      </section>
+      <section class="detail-card card">
+        <h3>风险清单</h3>
+        <ul id="detailRisks" class="risk-bullets"></ul>
+      </section>
+    </div>
+  </section>
+
+  <script>
+    const state = { time: "30d", region: "all", line: "all", channel: "all" };
+    const TIME_FACTORS = { "7d": 0.24, "30d": 1, "90d": 2.9 };
+    const CHANNEL_FACTORS = { all: 1, direct: 0.43, partner: 0.34, ecommerce: 0.23 };
+    const REGION_NAMES = { NA: "北美", EU: "欧洲", APAC: "亚太", LATAM: "拉美", MEA: "中东非" };
+    const RISK_SCORE = { low: 1, medium: 2, high: 3 };
+
+    const countries = [
+      {
+        code: "US", name: "美国", region: "NA", revenue: 32500000, orders: 241000, customers: 54000, margin: 0.31, fulfillment: 0.95, risk: "medium", yoy: 0.14,
+        lineMix: { cloud: 0.49, hardware: 0.33, subscription: 0.18 },
+        cities: [{ name: "纽约", x: 84, y: 96, orders: 54000, delay: 0.04 }, { name: "洛杉矶", x: 48, y: 122, orders: 46000, delay: 0.06 }, { name: "芝加哥", x: 70, y: 106, orders: 39000, delay: 0.03 }],
+        customerStruct: [{ name: "企业", share: 0.48, count: 620 }, { name: "中型", share: 0.33, count: 1680 }, { name: "长尾", share: 0.19, count: 8200 }],
+        funnel: { lead: 420000, quote: 330000, order: 241000, shipment: 229000, signed: 224000 },
+        sla: [{ name: "<24h", value: 0.54 }, { name: "24-48h", value: 0.33 }, { name: ">48h", value: 0.13 }],
+        profit: { revenue: 32500000, cost: -19100000, logistics: -3900000, tax: -1700000, profit: 7800000 },
+        risks: [{ level: "high", text: "西海岸港口拥堵", owner: "Ops-US", eta: "05-29" }, { level: "medium", text: "退货率阶段上升", owner: "Service-US", eta: "05-31" }]
+      },
+      {
+        code: "CA", name: "加拿大", region: "NA", revenue: 9800000, orders: 72000, customers: 18000, margin: 0.3, fulfillment: 0.962, risk: "low", yoy: 0.11,
+        lineMix: { cloud: 0.43, hardware: 0.36, subscription: 0.21 },
+        cities: [{ name: "多伦多", x: 100, y: 74, orders: 19000, delay: 0.03 }, { name: "温哥华", x: 48, y: 82, orders: 16000, delay: 0.04 }, { name: "蒙特利尔", x: 118, y: 78, orders: 13000, delay: 0.03 }],
+        customerStruct: [{ name: "企业", share: 0.44, count: 240 }, { name: "中型", share: 0.35, count: 740 }, { name: "长尾", share: 0.21, count: 3500 }],
+        funnel: { lead: 132000, quote: 102000, order: 72000, shipment: 70000, signed: 68800 },
+        sla: [{ name: "<24h", value: 0.59 }, { name: "24-48h", value: 0.29 }, { name: ">48h", value: 0.12 }],
+        profit: { revenue: 9800000, cost: -5610000, logistics: -1200000, tax: -590000, profit: 2400000 },
+        risks: [{ level: "low", text: "库存周转平稳", owner: "Ops-CA", eta: "05-27" }]
+      },
+      {
+        code: "BR", name: "巴西", region: "LATAM", revenue: 9600000, orders: 87000, customers: 23000, margin: 0.268, fulfillment: 0.925, risk: "high", yoy: -0.03,
+        lineMix: { cloud: 0.34, hardware: 0.48, subscription: 0.18 },
+        cities: [{ name: "圣保罗", x: 170, y: 144, orders: 26000, delay: 0.08 }, { name: "里约", x: 186, y: 162, orders: 17000, delay: 0.07 }, { name: "巴西利亚", x: 152, y: 132, orders: 12000, delay: 0.06 }],
+        customerStruct: [{ name: "企业", share: 0.35, count: 210 }, { name: "中型", share: 0.38, count: 960 }, { name: "长尾", share: 0.27, count: 4700 }],
+        funnel: { lead: 168000, quote: 132000, order: 87000, shipment: 80400, signed: 78100 },
+        sla: [{ name: "<24h", value: 0.42 }, { name: "24-48h", value: 0.34 }, { name: ">48h", value: 0.24 }],
+        profit: { revenue: 9600000, cost: -5860000, logistics: -1600000, tax: -520000, profit: 1620000 },
+        risks: [{ level: "high", text: "长链路物流时延", owner: "Ops-LATAM", eta: "06-02" }, { level: "medium", text: "汇率波动超阈值", owner: "Finance-LATAM", eta: "05-30" }]
+      },
+      {
+        code: "DE", name: "德国", region: "EU", revenue: 18600000, orders: 132000, customers: 31200, margin: 0.338, fulfillment: 0.972, risk: "low", yoy: 0.11,
+        lineMix: { cloud: 0.47, hardware: 0.3, subscription: 0.23 },
+        cities: [{ name: "柏林", x: 190, y: 90, orders: 29000, delay: 0.02 }, { name: "慕尼黑", x: 210, y: 126, orders: 22000, delay: 0.02 }, { name: "汉堡", x: 178, y: 72, orders: 17000, delay: 0.02 }],
+        customerStruct: [{ name: "企业", share: 0.51, count: 410 }, { name: "中型", share: 0.31, count: 1080 }, { name: "长尾", share: 0.18, count: 5100 }],
+        funnel: { lead: 246000, quote: 191000, order: 132000, shipment: 129000, signed: 126000 },
+        sla: [{ name: "<24h", value: 0.63 }, { name: "24-48h", value: 0.26 }, { name: ">48h", value: 0.11 }],
+        profit: { revenue: 18600000, cost: -10800000, logistics: -2200000, tax: -980000, profit: 4620000 },
+        risks: [{ level: "medium", text: "短期补货窗口偏紧", owner: "Supply-EU", eta: "05-28" }]
+      },
+      {
+        code: "FR", name: "法国", region: "EU", revenue: 12200000, orders: 92000, customers: 24100, margin: 0.318, fulfillment: 0.968, risk: "medium", yoy: 0.08,
+        lineMix: { cloud: 0.44, hardware: 0.33, subscription: 0.23 },
+        cities: [{ name: "巴黎", x: 164, y: 94, orders: 24000, delay: 0.03 }, { name: "里昂", x: 172, y: 118, orders: 13000, delay: 0.03 }, { name: "马赛", x: 176, y: 140, orders: 11000, delay: 0.04 }],
+        customerStruct: [{ name: "企业", share: 0.46, count: 320 }, { name: "中型", share: 0.34, count: 930 }, { name: "长尾", share: 0.2, count: 4300 }],
+        funnel: { lead: 168000, quote: 132000, order: 92000, shipment: 89000, signed: 87200 },
+        sla: [{ name: "<24h", value: 0.59 }, { name: "24-48h", value: 0.27 }, { name: ">48h", value: 0.14 }],
+        profit: { revenue: 12200000, cost: -7200000, logistics: -1500000, tax: -640000, profit: 2860000 },
+        risks: [{ level: "medium", text: "订单峰值窗口拥塞", owner: "Ops-FR", eta: "05-30" }]
+      },
+      {
+        code: "CN", name: "中国", region: "APAC", revenue: 21400000, orders: 168000, customers: 40200, margin: 0.322, fulfillment: 0.966, risk: "medium", yoy: 0.16,
+        lineMix: { cloud: 0.45, hardware: 0.39, subscription: 0.16 },
+        cities: [{ name: "上海", x: 278, y: 104, orders: 42000, delay: 0.03 }, { name: "深圳", x: 250, y: 140, orders: 34000, delay: 0.04 }, { name: "北京", x: 268, y: 86, orders: 31000, delay: 0.03 }],
+        customerStruct: [{ name: "企业", share: 0.43, count: 530 }, { name: "中型", share: 0.37, count: 1620 }, { name: "长尾", share: 0.2, count: 7900 }],
+        funnel: { lead: 298000, quote: 238000, order: 168000, shipment: 162500, signed: 158000 },
+        sla: [{ name: "<24h", value: 0.61 }, { name: "24-48h", value: 0.28 }, { name: ">48h", value: 0.11 }],
+        profit: { revenue: 21400000, cost: -12500000, logistics: -2500000, tax: -1200000, profit: 5200000 },
+        risks: [{ level: "medium", text: "部分核心器件交期拉长", owner: "Supply-CN", eta: "06-01" }]
+      },
+      {
+        code: "IN", name: "印度", region: "APAC", revenue: 10400000, orders: 102000, customers: 26000, margin: 0.274, fulfillment: 0.934, risk: "high", yoy: 0.09,
+        lineMix: { cloud: 0.31, hardware: 0.5, subscription: 0.19 },
+        cities: [{ name: "班加罗尔", x: 198, y: 138, orders: 21000, delay: 0.07 }, { name: "孟买", x: 172, y: 132, orders: 19000, delay: 0.06 }, { name: "德里", x: 178, y: 100, orders: 17000, delay: 0.06 }],
+        customerStruct: [{ name: "企业", share: 0.32, count: 260 }, { name: "中型", share: 0.41, count: 1220 }, { name: "长尾", share: 0.27, count: 5700 }],
+        funnel: { lead: 199000, quote: 156000, order: 102000, shipment: 94000, signed: 90300 },
+        sla: [{ name: "<24h", value: 0.44 }, { name: "24-48h", value: 0.36 }, { name: ">48h", value: 0.2 }],
+        profit: { revenue: 10400000, cost: -6500000, logistics: -1800000, tax: -430000, profit: 1670000 },
+        risks: [{ level: "high", text: "跨区履约延迟偏高", owner: "Ops-IN", eta: "06-03" }, { level: "medium", text: "末端配送效率波动", owner: "Logistics-IN", eta: "05-31" }]
+      },
+      {
+        code: "AU", name: "澳大利亚", region: "APAC", revenue: 6800000, orders: 52000, customers: 13200, margin: 0.298, fulfillment: 0.958, risk: "low", yoy: 0.07,
+        lineMix: { cloud: 0.41, hardware: 0.33, subscription: 0.26 },
+        cities: [{ name: "悉尼", x: 248, y: 146, orders: 14000, delay: 0.03 }, { name: "墨尔本", x: 230, y: 164, orders: 12000, delay: 0.03 }, { name: "布里斯班", x: 260, y: 124, orders: 9000, delay: 0.04 }],
+        customerStruct: [{ name: "企业", share: 0.45, count: 180 }, { name: "中型", share: 0.33, count: 540 }, { name: "长尾", share: 0.22, count: 2600 }],
+        funnel: { lead: 98000, quote: 76000, order: 52000, shipment: 50500, signed: 49500 },
+        sla: [{ name: "<24h", value: 0.56 }, { name: "24-48h", value: 0.31 }, { name: ">48h", value: 0.13 }],
+        profit: { revenue: 6800000, cost: -4000000, logistics: -860000, tax: -300000, profit: 1640000 },
+        risks: [{ level: "low", text: "产能计划稳定", owner: "Ops-AU", eta: "05-28" }]
+      },
+      {
+        code: "ZA", name: "南非", region: "MEA", revenue: 7200000, orders: 40000, customers: 9500, margin: 0.286, fulfillment: 0.941, risk: "medium", yoy: 0.05,
+        lineMix: { cloud: 0.28, hardware: 0.54, subscription: 0.18 },
+        cities: [{ name: "约翰内斯堡", x: 184, y: 132, orders: 12000, delay: 0.05 }, { name: "开普敦", x: 152, y: 176, orders: 9000, delay: 0.06 }, { name: "德班", x: 214, y: 160, orders: 7600, delay: 0.05 }],
+        customerStruct: [{ name: "企业", share: 0.37, count: 120 }, { name: "中型", share: 0.39, count: 410 }, { name: "长尾", share: 0.24, count: 1800 }],
+        funnel: { lead: 76000, quote: 61000, order: 40000, shipment: 37300, signed: 36100 },
+        sla: [{ name: "<24h", value: 0.49 }, { name: "24-48h", value: 0.32 }, { name: ">48h", value: 0.19 }],
+        profit: { revenue: 7200000, cost: -4300000, logistics: -1200000, tax: -320000, profit: 1380000 },
+        risks: [{ level: "medium", text: "港口吞吐压力上行", owner: "Ops-MEA", eta: "06-01" }]
+      }
+    ];
+
+    const channels = [
+      { id: "direct", name: "直营", share: 0.43 },
+      { id: "partner", name: "伙伴", share: 0.34 },
+      { id: "ecommerce", name: "电商", share: 0.23 }
+    ];
+
+    const baseTrend = [3.7, 3.9, 4.0, 4.1, 4.0, 4.2, 4.35, 4.26, 4.44, 4.58, 4.52, 4.66];
+
+    const events = [
+      { time: "05-20 10:00", title: "全球促销活动启动", region: "GLOBAL" },
+      { time: "05-21 14:30", title: "欧洲仓补货完成", region: "EU" },
+      { time: "05-23 03:20", title: "拉美物流预警", region: "LATAM" },
+      { time: "05-24 08:40", title: "亚太新品发布", region: "APAC" },
+      { time: "05-24 17:00", title: "北美价格策略调整", region: "NA" },
+      { time: "05-25 09:30", title: "全球数据快照更新", region: "GLOBAL" }
+    ];
+
+    const mapStage = document.getElementById("mapStage");
+    const tooltip = document.getElementById("tooltip");
+    const detailOverlay = document.getElementById("detailOverlay");
+    const countryNodes = [...document.querySelectorAll(".country")];
+    const flowNodes = [...document.querySelectorAll(".flow")];
+    const snapshotTime = document.getElementById("snapshotTime");
+
+    const kpiEls = {
+      revenue: document.getElementById("kpiRevenue"),
+      orders: document.getElementById("kpiOrders"),
+      customers: document.getElementById("kpiCustomers"),
+      margin: document.getElementById("kpiMargin"),
+      fulfillment: document.getElementById("kpiFulfillment"),
+      alerts: document.getElementById("kpiAlerts")
+    };
+
+    let currentProjected = [];
+    let currentLookup = new Map();
+    let selectedCountryCode = null;
+
+    function formatMoney(v) {
+      return v >= 1e9 ? `$${(v / 1e9).toFixed(2)}B` : `$${(v / 1e6).toFixed(1)}M`;
+    }
+
+    function formatCount(v) {
+      if (v >= 1e6) return `${(v / 1e6).toFixed(2)}M`;
+      if (v >= 1e3) return `${(v / 1e3).toFixed(0)}K`;
+      return `${Math.round(v)}`;
+    }
+
+    function formatPct(v) {
+      return `${(v * 100).toFixed(1)}%`;
+    }
+
+    function animateNumber(el, target, formatter) {
+      const start = Number(el.dataset.value || 0);
+      const duration = 520;
+      const t0 = performance.now();
+      function tick(t) {
+        const p = Math.min((t - t0) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        const value = start + (target - start) * eased;
+        el.textContent = formatter(value);
+        if (p < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          el.dataset.value = String(target);
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function toRgb(a, b, t) {
+      const r = Math.round(a[0] + (b[0] - a[0]) * t);
+      const g = Math.round(a[1] + (b[1] - a[1]) * t);
+      const b2 = Math.round(a[2] + (b[2] - a[2]) * t);
+      return `rgb(${r}, ${g}, ${b2})`;
+    }
+
+    function revenueColor(value, min, max) {
+      const t = max === min ? 0.5 : Math.max(0, Math.min(1, (value - min) / (max - min)));
+      return toRgb([26, 46, 76], [0, 209, 255], 0.18 + t * 0.82);
+    }
+
+    function projectCountry(country) {
+      const tf = TIME_FACTORS[state.time];
+      const lf = state.line === "all" ? 1 : country.lineMix[state.line];
+      const cf = state.channel === "all" ? 1 : CHANNEL_FACTORS[state.channel];
+      const scale = tf * lf * cf;
+      const customerTimeFactor = state.time === "90d" ? 1.15 : state.time === "7d" ? 0.74 : 1;
+      const marginDelta = state.line === "cloud" ? 0.028 : state.line === "hardware" ? -0.024 : state.line === "subscription" ? 0.018 : 0;
+      const fulfillmentDelta = state.channel === "partner" ? -0.012 : state.channel === "ecommerce" ? -0.02 : 0;
+      return {
+        ...country,
+        scale,
+        revenueNow: country.revenue * scale,
+        ordersNow: country.orders * scale,
+        customersNow: country.customers * lf * cf * customerTimeFactor,
+        marginNow: Math.max(0.12, Math.min(0.58, country.margin + marginDelta)),
+        fulfillmentNow: Math.max(0.78, Math.min(0.99, country.fulfillment + fulfillmentDelta))
+      };
+    }
+
+    function computeProjectedCountries() {
+      return countries
+        .filter(c => state.region === "all" || c.region === state.region)
+        .map(projectCountry);
+    }
+
+    function renderKPIs(projected) {
+      const revenue = projected.reduce((s, c) => s + c.revenueNow, 0);
+      const orders = projected.reduce((s, c) => s + c.ordersNow, 0);
+      const customers = projected.reduce((s, c) => s + c.customersNow, 0);
+      const margin = revenue > 0 ? projected.reduce((s, c) => s + c.marginNow * c.revenueNow, 0) / revenue : 0;
+      const fulfillment = orders > 0 ? projected.reduce((s, c) => s + c.fulfillmentNow * c.ordersNow, 0) / orders : 0;
+      const alerts = Math.round(projected.reduce((s, c) => s + RISK_SCORE[c.risk] * (c.ordersNow / 80000), 0));
+
+      animateNumber(kpiEls.revenue, revenue, formatMoney);
+      animateNumber(kpiEls.orders, orders, formatCount);
+      animateNumber(kpiEls.customers, customers, formatCount);
+      animateNumber(kpiEls.margin, margin, formatPct);
+      animateNumber(kpiEls.fulfillment, fulfillment, formatPct);
+      animateNumber(kpiEls.alerts, alerts, v => `${Math.round(v)}`);
+    }
+
+    function renderMap(projected) {
+      const revenueMap = new Map(projected.map(c => [c.code, c.revenueNow]));
+      const values = [...revenueMap.values()];
+      const min = values.length ? Math.min(...values) : 0;
+      const max = values.length ? Math.max(...values) : 1;
+
+      countryNodes.forEach(node => {
+        const code = node.dataset.code;
+        const path = node.querySelector("path");
+        const value = revenueMap.get(code);
+        if (!value) {
+          path.style.fill = "#12213a";
+          path.style.opacity = "0.35";
+        } else {
+          path.style.fill = revenueColor(value, min, max);
+          path.style.opacity = "1";
+        }
+        node.classList.toggle("active", code === selectedCountryCode);
+      });
+
+      const maxFlowBase = 42000;
+      flowNodes.forEach(flow => {
+        const from = currentLookup.get(flow.dataset.from);
+        const to = currentLookup.get(flow.dataset.to);
+        if (!from || !to) {
+          flow.style.opacity = "0.12";
+          flow.style.strokeWidth = "1";
+          return;
+        }
+        const intensity = Math.max(0.12, Math.min(1, Math.min(from.ordersNow, to.ordersNow) / maxFlowBase));
+        flow.style.opacity = String(0.2 + intensity * 0.68);
+        flow.style.strokeWidth = String(1 + intensity * 2.4);
+      });
+    }
+
+    function renderRegionRanking(projected) {
+      const regionTotals = projected.reduce((acc, c) => {
+        acc[c.region] = (acc[c.region] || 0) + c.revenueNow;
+        return acc;
+      }, {});
+      const rows = Object.entries(regionTotals)
+        .map(([region, revenue]) => ({ region, revenue }))
+        .sort((a, b) => b.revenue - a.revenue);
+      const max = rows[0]?.revenue || 1;
+
+      const html = rows.map((row, i) => {
+        const width = Math.max(10, (row.revenue / max) * 100);
+        return `
+          <div class="rank-item">
+            <div class="rank-head">
+              <span>${i + 1}. ${REGION_NAMES[row.region]}</span>
+              <span class="minor">${formatMoney(row.revenue)}</span>
+            </div>
+            <div class="bar"><span style="width:${width}%"></span></div>
+          </div>`;
+      }).join("");
+
+      document.getElementById("regionRanking").innerHTML = html || `<div class="minor">当前筛选无数据</div>`;
+    }
+
+    function renderChannelMix() {
+      const html = channels.map(c => {
+        const active = state.channel === "all" || state.channel === c.id;
+        const ratio = state.channel === "all" ? c.share : (state.channel === c.id ? 1 : 0.08);
+        const width = Math.max(8, ratio * 100);
+        const label = state.channel === "all" ? `${(c.share * 100).toFixed(1)}%` : (state.channel === c.id ? "100%" : "-");
+        return `
+          <div class="channel-item" style="opacity:${active ? 1 : 0.45}">
+            <div class="channel-head">
+              <span>${c.name}</span>
+              <span class="minor">${label}</span>
+            </div>
+            <div class="bar"><span style="width:${width}%"></span></div>
+          </div>`;
+      }).join("");
+
+      document.getElementById("channelMix").innerHTML = html;
+    }
+
+    function renderTrend(projected) {
+      const revenue = projected.reduce((s, c) => s + c.revenueNow, 0);
+      const scale = revenue / 128500000;
+      const count = state.time === "7d" ? 7 : state.time === "30d" ? 12 : 18;
+      const series = Array.from({ length: count }, (_, i) => {
+        const base = baseTrend[i % baseTrend.length];
+        const wave = 1 + (((i % 4) - 1.5) * 0.03);
+        return base * scale * wave;
+      });
+
+      const w = 360;
+      const h = 210;
+      const px = 18;
+      const py = 14;
+      const min = Math.min(...series);
+      const max = Math.max(...series);
+      const xStep = (w - px * 2) / (series.length - 1 || 1);
+
+      const points = series.map((v, i) => {
+        const x = px + i * xStep;
+        const y = h - py - ((v - min) / (max - min || 1)) * (h - py * 2);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      });
+
+      const areaPoints = [`${px},${h - py}`, ...points, `${w - px},${h - py}`].join(" ");
+
+      const xLabels = [0, Math.floor((series.length - 1) / 2), series.length - 1]
+        .map(i => `<text x="${(px + i * xStep).toFixed(1)}" y="198" fill="#8fa8c8" font-size="12" text-anchor="middle">${i + 1}</text>`)
+        .join("");
+
+      document.getElementById("trendSvg").innerHTML = `
+        <defs>
+          <linearGradient id="trendLine" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#3b82f6"></stop>
+            <stop offset="100%" stop-color="#00d1ff"></stop>
+          </linearGradient>
+          <linearGradient id="trendArea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(0,209,255,0.36)"></stop>
+            <stop offset="100%" stop-color="rgba(0,209,255,0.03)"></stop>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="360" height="210" fill="transparent"></rect>
+        <polyline points="${areaPoints}" fill="url(#trendArea)" stroke="none"></polyline>
+        <polyline points="${points.join(" ")}" fill="none" stroke="url(#trendLine)" stroke-width="3"></polyline>
+        <line x1="18" y1="18" x2="18" y2="196" stroke="#264367" stroke-width="1"></line>
+        <line x1="18" y1="196" x2="342" y2="196" stroke="#264367" stroke-width="1"></line>
+        ${xLabels}
+      `;
+    }
+
+    function renderRiskList(projected) {
+      const rows = projected
+        .map(c => ({
+          code: c.code,
+          name: c.name,
+          risk: c.risk,
+          score: RISK_SCORE[c.risk] * (c.revenueNow / 1000000),
+          impact: (Math.abs(c.yoy) * 100).toFixed(1)
+        }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 5);
+
+      const html = rows.map(item => `
+        <li class="risk-item">
+          <div class="risk-head">
+            <span>${item.name}</span>
+            <span class="chip ${item.risk}">${item.risk === "high" ? "高" : item.risk === "medium" ? "中" : "低"}</span>
+          </div>
+          <div class="minor">波动影响 ${item.impact}% · ${item.code}</div>
+        </li>
+      `).join("");
+
+      document.getElementById("riskList").innerHTML = html || `<li class="minor">当前筛选无风险项</li>`;
+    }
+
+    function renderTimeline() {
+      const rows = events.filter(e => state.region === "all" || e.region === "GLOBAL" || e.region === state.region).slice(0, 6);
+      const html = rows.map(e => `
+        <article class="event">
+          <div class="time">${e.time}</div>
+          <div class="title">${e.title}</div>
+        </article>
+      `).join("");
+      document.getElementById("timelineTrack").innerHTML = html;
+    }
+
+    function showTooltip(event, country) {
+      const rect = mapStage.getBoundingClientRect();
+      tooltip.style.left = `${event.clientX - rect.left + 14}px`;
+      tooltip.style.top = `${event.clientY - rect.top + 14}px`;
+      tooltip.innerHTML = `
+        <b>${country.name}</b>
+        <div class="line"><span>营收</span><span>${formatMoney(country.revenueNow)}</span></div>
+        <div class="line"><span>订单</span><span>${formatCount(country.ordersNow)}</span></div>
+        <div class="line"><span>毛利率</span><span>${formatPct(country.marginNow)}</span></div>
+        <div class="line"><span>履约率</span><span>${formatPct(country.fulfillmentNow)}</span></div>
+      `;
+      tooltip.style.display = "block";
+    }
+
+    function closeDetail() {
+      selectedCountryCode = null;
+      detailOverlay.classList.remove("show");
+      detailOverlay.setAttribute("aria-hidden", "true");
+      renderMap(currentProjected);
+    }
+
+    function renderDetail(country) {
+      const base = countries.find(c => c.code === country.code);
+      const scale = country.ordersNow / (base.orders || 1);
+
+      document.getElementById("detailTitle").textContent = `${country.name} · 运营详情`;
+      document.getElementById("dRevenue").textContent = formatMoney(country.revenueNow);
+      document.getElementById("dOrders").textContent = formatCount(country.ordersNow);
+      document.getElementById("dMargin").textContent = formatPct(country.marginNow);
+      document.getElementById("dFulfillment").textContent = formatPct(country.fulfillmentNow);
+
+      const cityOrders = base.cities.map(c => c.orders * scale);
+      const maxCity = Math.max(...cityOrders, 1);
+      const circles = base.cities.map((c, i) => {
+        const ov = c.orders * scale;
+        const r = 8 + (ov / maxCity) * 18;
+        const color = c.delay > 0.065 ? "#ef4444" : c.delay > 0.045 ? "#f59e0b" : "#22c55e";
+        return `<g>
+          <circle cx="${c.x}" cy="${c.y}" r="${r.toFixed(1)}" fill="${color}" fill-opacity="0.24" stroke="${color}" stroke-width="1.8"></circle>
+          <circle cx="${c.x}" cy="${c.y}" r="3.5" fill="#dff4ff"></circle>
+          <text x="${c.x + 10}" y="${c.y + 4}" class="city-label">${c.name}</text>
+        </g>`;
+      }).join("");
+
+      document.getElementById("cityHeat").innerHTML = `
+        <svg viewBox="0 0 420 220" style="width:100%;min-height:220px;border:1px solid #2a4569;border-radius:10px;background:linear-gradient(180deg,#0f1c33,#0b172c)">
+          <path d="M36 44 L142 24 L238 38 L314 70 L380 96 L368 168 L296 188 L206 178 L112 188 L44 148 Z" fill="#183156" opacity="0.48"></path>
+          ${circles}
+        </svg>
+      `;
+
+      const customerHtml = base.customerStruct.map(s => `
+        <div class="mini-row">
+          <div class="line"><span>${s.name}</span><span>${(s.share * 100).toFixed(1)}%</span></div>
+          <div class="mini-bar"><span style="width:${(s.share * 100).toFixed(1)}%"></span></div>
+          <div class="minor">${formatCount(s.count * scale)} 客户</div>
+        </div>
+      `).join("");
+      document.getElementById("customerStruct").innerHTML = customerHtml;
+
+      const funnelStages = [
+        { key: "lead", label: "线索" },
+        { key: "quote", label: "报价" },
+        { key: "order", label: "下单" },
+        { key: "shipment", label: "发货" },
+        { key: "signed", label: "签收" }
+      ].map(s => ({
+        ...s,
+        value: base.funnel[s.key] * scale
+      }));
+
+      const funnelMax = Math.max(...funnelStages.map(s => s.value), 1);
+      document.getElementById("funnel").innerHTML = funnelStages.map(s => {
+        const h = Math.max(26, (s.value / funnelMax) * 118);
+        return `<div class="stage" style="height:${h}px"><b>${s.label}</b>${formatCount(s.value)}</div>`;
+      }).join("");
+
+      const slaAdjustment = state.channel === "partner" ? 0.03 : state.channel === "ecommerce" ? 0.04 : 0;
+      const slaData = base.sla.map(i => {
+        if (i.name === ">48h") return { ...i, value: Math.min(0.34, i.value + slaAdjustment) };
+        if (i.name === "<24h") return { ...i, value: Math.max(0.32, i.value - slaAdjustment * 0.72) };
+        return i;
+      });
+      const totalSla = slaData.reduce((s, i) => s + i.value, 0);
+      const normalized = slaData.map(i => ({ ...i, value: i.value / totalSla }));
+
+      document.getElementById("sla").innerHTML = normalized.map(i => `
+        <div class="mini-row">
+          <div class="line"><span>${i.name}</span><span>${(i.value * 100).toFixed(1)}%</span></div>
+          <div class="mini-bar"><span style="width:${(i.value * 100).toFixed(1)}%"></span></div>
+        </div>
+      `).join("");
+
+      const profitEntries = [
+        { name: "营收", value: base.profit.revenue * scale },
+        { name: "成本", value: base.profit.cost * scale },
+        { name: "物流", value: base.profit.logistics * scale },
+        { name: "税费", value: base.profit.tax * scale },
+        { name: "利润", value: base.profit.profit * scale }
+      ];
+      const maxAbs = Math.max(...profitEntries.map(i => Math.abs(i.value)), 1);
+
+      document.getElementById("profit").innerHTML = profitEntries.map(i => {
+        const width = Math.max(8, Math.abs(i.value) / maxAbs * 100);
+        const color = i.value >= 0 ? "linear-gradient(90deg,#1f8f56,#22c55e)" : "linear-gradient(90deg,#9f2d2d,#ef4444)";
+        return `
+          <div class="mini-row">
+            <div class="line"><span>${i.name}</span><span>${formatMoney(Math.abs(i.value))}</span></div>
+            <div class="mini-bar"><span style="width:${width}%;background:${color}"></span></div>
+          </div>
+        `;
+      }).join("");
+
+      const riskHtml = base.risks.map(r => `
+        <li>
+          <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+            <span>${r.text}</span>
+            <span class="chip ${r.level}">${r.level === "high" ? "高" : r.level === "medium" ? "中" : "低"}</span>
+          </div>
+          <div class="minor">${r.owner} · ETA ${r.eta}</div>
+        </li>
+      `).join("");
+      document.getElementById("detailRisks").innerHTML = riskHtml;
+
+      detailOverlay.classList.add("show");
+      detailOverlay.setAttribute("aria-hidden", "false");
+    }
+
+    function openDetail(code) {
+      const selected = currentLookup.get(code);
+      if (!selected) return;
+      selectedCountryCode = code;
+      renderMap(currentProjected);
+      renderDetail(selected);
+    }
+
+    function refresh() {
+      currentProjected = computeProjectedCountries();
+      currentLookup = new Map(currentProjected.map(c => [c.code, c]));
+      renderKPIs(currentProjected);
+      renderMap(currentProjected);
+      renderRegionRanking(currentProjected);
+      renderChannelMix();
+      renderTrend(currentProjected);
+      renderRiskList(currentProjected);
+      renderTimeline();
+      if (selectedCountryCode) {
+        const selected = currentLookup.get(selectedCountryCode);
+        if (selected) {
+          renderDetail(selected);
+        } else {
+          closeDetail();
+        }
+      }
+    }
+
+    document.getElementById("timeRange").addEventListener("change", e => {
+      state.time = e.target.value;
+      refresh();
+    });
+
+    document.getElementById("regionFilter").addEventListener("change", e => {
+      state.region = e.target.value;
+      refresh();
+    });
+
+    document.getElementById("lineFilter").addEventListener("change", e => {
+      state.line = e.target.value;
+      refresh();
+    });
+
+    document.getElementById("channelFilter").addEventListener("change", e => {
+      state.channel = e.target.value;
+      refresh();
+    });
+
+    mapStage.addEventListener("mousemove", e => {
+      const node = e.target.closest(".country");
+      if (!node) {
+        tooltip.style.display = "none";
+        return;
+      }
+      const data = currentLookup.get(node.dataset.code);
+      if (!data) {
+        tooltip.style.display = "none";
+        return;
+      }
+      showTooltip(e, data);
+    });
+
+    mapStage.addEventListener("mouseleave", () => {
+      tooltip.style.display = "none";
+    });
+
+    mapStage.addEventListener("click", e => {
+      const node = e.target.closest(".country");
+      if (!node) return;
+      openDetail(node.dataset.code);
+    });
+
+    document.getElementById("backBtn").addEventListener("click", closeDetail);
+
+    snapshotTime.textContent = `数据快照 ${new Date().toLocaleString("zh-CN", { hour12: false })}`;
+    refresh();
+  </script>
+</body>
+</html>
